@@ -1,14 +1,20 @@
 ---
 description: Use ALWAYS when asked to CREATE A RULE or UPDATE A RULE or taught a lesson from the user that should be retained as a new rule for Cursor
 globs: .cursor/rules/*.mdc
+alwaysApply: false
 ---
+
 # Cursor Rules Format
+
+<version>1.1.0</version>
+
 ## Core Structure
 
 ```mdc
 ---
 description: ACTION when TRIGGER to OUTCOME
 globs: *.mdc
+alwaysApply: false
 ---
 
 # Rule Title
@@ -65,6 +71,7 @@ Common glob patterns for different rule types:
 ### Frontmatter
 - description: ACTION TRIGGER OUTCOME format
 - globs: `glob pattern for files and folders`
+- alwaysApply: `true` or `false` (determines if rule should be applied on every request)
 
 ### Body
 - <version>X.Y.Z</version>
@@ -84,10 +91,51 @@ Common glob patterns for different rule types:
   - <critical>
   - <version>
 - Always indent content within XML or nested XML tags by 2 spaces
-- Keep rules as short as possbile
+- Keep rules as short as possible
 - Use Mermaid syntax if it will be shorter or clearer than describing a complex rule
 - Use Emojis where appropriate to convey meaning that will improve rule understanding by the AI Agent
 - Keep examples as short as possible to clearly convey the positive or negative example
+
+## File Reference Rules
+
+### Required Syntax
+- 🔗 ALWAYS use `[filename](mdc:filename)` syntax when referencing ANY file in the codebase
+- 📝 This applies to ALL file references, including:
+  - Configuration files
+  - Source code files
+  - Documentation files
+  - Rule files
+  - Any other files in the project
+- ⚠️ NEVER use relative paths (./) or absolute paths
+- ⚠️ NEVER use plain text file names
+- ⚠️ NEVER use markdown links without the mdc: prefix
+
+### Examples
+
+<example>
+✅ Correct file references:
+- `[package.json](mdc:package.json)`
+- `[README.md](mdc:README.md)`
+- `[src/index.ts](mdc:src/index.ts)`
+- `[.cursor/rules/example.mdc](mdc:.cursor/rules/example.mdc)`
+
+❌ Incorrect file references (NEVER use these):
+- `package.json`
+- `README.md`
+- `src/index.ts`
+- `.cursor/rules/example.mdc`
+- `[package.json](mdc:package.json)`
+- `[README.md](mdc:README.md)`
+- `[src/index.ts](mdc:src/index.ts)`
+</example>
+
+<critical>
+  - ALWAYS use `[filename](mdc:filename)` syntax for ANY file reference
+  - NEVER use relative paths (./) or absolute paths
+  - NEVER use plain text file names
+  - NEVER use markdown links without the mdc: prefix
+  - This rule applies to ALL file references in ALL rules and ALL responses
+</critical>
 
 ## AI Optimization Tips
 
@@ -96,19 +144,24 @@ Common glob patterns for different rule types:
 3. Optimize for AI context window efficiency
 4. Remove any non-essential or redundant information
 5. Use standard glob patterns without quotes (e.g., *.js, src/**/*.ts)
+6. ALWAYS use `[filename](mdc:filename)` syntax for file references
 
 ## AI Context Efficiency
 
-1. Keep frontmatter description under 120 characters (or less) while maintaining clear intent for rule selection by AI AGent
+1. Keep frontmatter description under 120 characters (or less) while maintaining clear intent for rule selection by AI Agent
 2. Limit examples to essential patterns only
 3. Use hierarchical structure for quick parsing
 4. Remove redundant information across sections
 5. Maintain high information density with minimal tokens
 6. Focus on machine-actionable instructions over human explanations
+7. ALWAYS use `[filename](mdc:filename)` syntax for file references to maintain clear relationships in the codebase
 
 <critical>
   - NEVER include verbose explanations or redundant context that increases AI token overhead
-  - Keep file as short and to the point as possible BUT NEVER at the expense of sacrificing rule impact and usefulness for the AI Agent.
-  - the front matter can ONLY have the fields description and globs.
+  - Keep file as short and to the point as possible BUT NEVER at the expense of sacrificing rule impact and usefulness for the AI Agent
+  - The front matter can ONLY have the fields description, globs, and alwaysApply
+  - ALWAYS use `[filename](mdc:filename)` syntax when referencing ANY file in the codebase
+  - NEVER use relative paths (./) or absolute paths
+  - NEVER use plain text file names
+  - NEVER use markdown links without the mdc: prefix
 </critical>
-
